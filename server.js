@@ -31,7 +31,24 @@ app.use("/api/v1", routes);
 
 const PORT = process.env.PORT || 5000;
 
+// app.listen(PORT, () => {
+//   console.log(`Server is running on PORT ${PORT}`.yellow.bold);
+//   console.log(`Swagger UI available at http://localhost:${PORT}/api-docs`.cyan.bold);
+// });
+
 app.listen(PORT, () => {
   console.log(`Server is running on PORT ${PORT}`.yellow.bold);
   console.log(`Swagger UI available at http://localhost:${PORT}/api-docs`.cyan.bold);
+
+  // ✅ SAFE EMAIL JOB START
+  if (process.env.NODE_ENV === "production") {
+    setTimeout(async () => {
+      try {
+        await sendReminderEmails();
+        console.log("Reminder emails executed successfully");
+      } catch (err) {
+        console.error("Email job failed:", err.message);
+      }
+    }, 10000); // wait 10 seconds after startup
+  }
 });
